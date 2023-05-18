@@ -51,8 +51,8 @@ pub fn imgui_inspector_derive(input: TokenStream) -> TokenStream {
         let speed = attribute.speed;
         let imgui_widget = if let Some(widget) = attribute.widget {
             match widget.as_str() {
-                "drag" => quote! { self.#field_name.inspect_drag(ui, #name), },
-                "slider" => quote! { self.#field_name.inspect_slider(ui, #name), },
+                "drag" => quote! { self.#field_name.inspect_drag(ui, #name, #min, #max), },
+                "slider" => quote! { self.#field_name.inspect_slider(ui, #name, #min, #max), },
                 _ => panic!("Invalid Widget! Field: {}.{}", name, field_name)
             }
         } else {
