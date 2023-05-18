@@ -1,7 +1,7 @@
 mod inspect_numeric;
 
 pub trait ImguiInspect {
-    fn inspect(&mut self, ui: &mut imgui::Ui) -> bool;
+    fn imgui_inspect<'a>(&mut self, ui: &'a imgui::Ui) -> bool;
 }
 
 pub trait InspectNumeric {

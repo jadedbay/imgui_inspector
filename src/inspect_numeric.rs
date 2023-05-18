@@ -34,25 +34,13 @@ macro_rules! impl_inspect_generic {
 
     (@fields $c:ident::$vec:ident($($field:ident),*), $t:ty) => {
         impl InspectNumeric for $c::$vec<$t> {
-            fn inspect_drag<'a>(&mut self, ui: &'a imgui::Ui, _label: &str) -> bool {
-                let mut is_changed = false;
-
-                $(
-                    let value = imgui::Drag::new(stringify!($field)).build(ui, &mut self.$field);
-                    if !is_changed { is_changed = value; }
-                )*
-
-                is_changed
+            fn inspect_drag<'a>(&mut self, ui: &'a imgui::Ui, label: &str) -> bool {
+                let is_changed = vec![$(imgui::Drag::new(format!("{}##{}", stringify!($field), label)).build(ui, &mut self.$field),)*];
+                is_changed.iter().any(|&value| value == true)
             }
-            fn inspect_slider<'a>(&mut self, ui: &'a imgui::Ui, _label: &str) -> bool {
-                let mut is_changed = false;
-
-                $(
-                    let value = ui.slider(stringify!($field), -100.0 as $t, 100.0 as $t, &mut self.$field);
-                    if !is_changed { is_changed = value; }
-                )*
-
-                is_changed
+            fn inspect_slider<'a>(&mut self, ui: &'a imgui::Ui, label: &str) -> bool {
+                let is_changed = vec![$(ui.slider(format!("{}##{}", stringify!($field), label), -100.0 as $t, 100.0 as $t, &mut self.$field),)*];
+                is_changed.iter().any(|&value| value == true)
             }
         }
     }
