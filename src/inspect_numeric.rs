@@ -4,9 +4,11 @@ macro_rules! impl_inspect_numeric {
     ($($t:ty),+) => {
         $(
             impl InspectNumeric for $t {
-                fn inspect_drag<'a>(&mut self, ui: &'a imgui::Ui, label: &str, min: f32, max: f32) -> bool {
+                fn inspect_drag<'a>(&mut self, ui: &'a imgui::Ui, label: &str, min: f32, max: f32, speed: f32) -> bool {
                     imgui::Drag::new(label)
+                        .flags(imgui::SliderFlags::NO_INPUT)
                         .range(min as $t, max as $t)
+                        .speed(speed)
                         .build(ui, self)
                 }
                 fn inspect_slider<'a>(&mut self, ui: &'a imgui::Ui, label: &str, min: f32, max: f32) -> bool {
@@ -35,10 +37,12 @@ macro_rules! impl_inspect_generic {
 
     (@fields $c:ident::$vec:ident($($field:ident),*), $t:ty) => {
         impl InspectNumeric for $c::$vec<$t> {
-            fn inspect_drag<'a>(&mut self, ui: &'a imgui::Ui, label: &str, min: f32, max: f32) -> bool {
+            fn inspect_drag<'a>(&mut self, ui: &'a imgui::Ui, label: &str, min: f32, max: f32, speed: f32) -> bool {
                 let is_changed = vec![
                     $(imgui::Drag::new(format!("{}##{}", stringify!($field), label))
+                        .flags(imgui::SliderFlags::NO_INPUT)
                         .range(min as $t, max as $t)
+                        .speed(speed)
                         .build(ui, &mut self.$field),
                     )*
                 ];

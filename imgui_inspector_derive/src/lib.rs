@@ -18,7 +18,7 @@ impl Default for InspectAttribute {
         Self {
             widget: Some("drag".to_string()),
             min: 0.0,
-            max: 100.0,
+            max: 0.0,
             hide: false,
             speed: 1.0,
         }
@@ -51,8 +51,9 @@ pub fn imgui_inspector_derive(input: TokenStream) -> TokenStream {
         let speed = attribute.speed;
         let imgui_widget = if let Some(widget) = attribute.widget {
             match widget.as_str() {
-                "drag" => quote! { self.#field_name.inspect_drag(ui, #name, #min, #max), },
+                "drag" => quote! { self.#field_name.inspect_drag(ui, #name, #min, #max, #speed), },
                 "slider" => quote! { self.#field_name.inspect_slider(ui, #name, #min, #max), },
+                "custom" => quote! { self.#field_name.inspect_custom(ui, #name, #min, #max, #speed), },
                 _ => panic!("Invalid Widget! Field: {}.{}", name, field_name)
             }
         } else {
