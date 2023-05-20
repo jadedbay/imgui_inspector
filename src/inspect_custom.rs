@@ -66,7 +66,7 @@ impl InspectCustomVector for cg::Vector3<f32> {
             is_changed.push(true);
         }
         ui.same_line_with_spacing(0.0, 0.0);
-        is_changed.push(ui.input_float(format!("##z{}",label), &mut self.y).build());
+        is_changed.push(ui.input_float(format!("##z{}",label), &mut self.z).build());
         if clamped { self.z = self.z.max(min).min(max); }
         
         width.end();

@@ -54,6 +54,7 @@ pub fn imgui_inspector_derive(input: TokenStream) -> TokenStream {
                 "drag" => quote! { self.#field_name.inspect_drag(ui, #name, #min, #max, #speed), },
                 "slider" => quote! { self.#field_name.inspect_slider(ui, #name, #min, #max), },
                 "custom" => quote! { self.#field_name.inspect_custom(ui, #name, #min, #max, #speed), },
+                "color" => quote! { self.#field_name.inspect_color(ui, #name), },
                 _ => panic!("Invalid Widget! Field: {}.{}", name, field_name)
             }
         } else {
