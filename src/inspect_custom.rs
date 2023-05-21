@@ -13,9 +13,15 @@ impl InspectCustomVector for cg::Vector3<f32> {
 
         let window_width = ui.content_region_avail()[0];
         let padding = ui.clone_style().window_padding;
-        let field_width = (window_width - (19.0 * 3.0) - (padding[0] * 2.0)) / 3.0;
+        let text_size = ui.calc_text_size(label);
+        let field_width = (window_width - (19.0 * 3.0) - (padding[0] * 2.0) - (text_size[0] + 56.0 - text_size[0])) / 3.0;
+
+        ui.text(label);
 
         let width = ui.push_item_width(field_width);
+
+        ui.same_line_with_spacing(0.0, 56.0 - text_size[0] + ui.clone_style().item_spacing[0]);
+
         ui.button_with_size(format!("x##{}",label), [19.0, 19.0]);
         
         if ui.is_item_hovered() {
