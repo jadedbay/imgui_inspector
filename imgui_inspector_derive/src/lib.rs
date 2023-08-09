@@ -55,6 +55,7 @@ pub fn imgui_inspector_derive(input: TokenStream) -> TokenStream {
                 "slider" => quote! { self.#field_name.inspect_slider(ui, #name, #min, #max), },
                 "custom" => quote! { self.#field_name.inspect_custom(ui, #name, #min, #max, #speed), },
                 "color" => quote! { self.#field_name.inspect_color(ui, #name), },
+                "texture" => quote! { self.#field_name.inspect_texture(ui, #name), },
                 _ => panic!("Invalid Widget! Field: {}.{}", name, field_name)
             }
         } else {
@@ -66,9 +67,8 @@ pub fn imgui_inspector_derive(input: TokenStream) -> TokenStream {
 
     let output = quote! {
         impl ImguiInspect for #name {
-            fn imgui_inspect<'a>(&mut self, ui: &'a imgui::Ui) -> bool {
-                let is_changed = vec![#(#field_code)*];
-                is_changed.iter().any(|&value| value == true)
+            fn imgui_inspect<'a>(&mut self, ui: &'a imgui::Ui) -> Vec<bool> {
+                vec![#(#field_code)*]
             }
         }
     };
